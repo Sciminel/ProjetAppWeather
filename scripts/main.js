@@ -20,7 +20,7 @@ if(navigator.geolocation){
 
         AppelApi(longitude, latitude);
     }, () => {
-       // alert("Vous avez refusé la géolocalisation, l'appli ne peut pas fonctionner.. Activer le");
+        alert("Vous avez refusé la géolocalisation, l'appli ne peut pas fonctionner.. Activer le");
     })
 }
 
