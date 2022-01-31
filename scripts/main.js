@@ -1,5 +1,17 @@
+import tabJourEnOrdre from "./Utilitaire/gestionTemps.js";
+console.log(tabJourEnOrdre)
+
 const CLEAPI = '799e707caad6e7c4dbfcb4fa8bca396b'
-let resultatsAPI;
+const temps = document.querySelector('.temps');
+const temperature = document.querySelector('.temperature');
+const localisation = document.querySelector('.localisation');
+const previsionHeure = document.querySelectorAll('.heure-nom-prevision');
+const previsionDegre = document.querySelectorAll('.heure-prevision-valeur');
+const jourSemaine = document.querySelectorAll('.jour-prevision-nom');
+const joursTemperature = document.querySelectorAll('.jour-prevision-temp');
+const imgIcon = document.querySelector('.logo-meteo');
+const chargement = document.querySelector('.overlay-icon-chargement')
+
 
 if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(position => {
@@ -18,21 +30,58 @@ function AppelApi(long, lat){
         return response.json();
     })
     .then((data) => {
-        console.log(data)
-
-        const temps = document.querySelector('.temps');
-        const temperature = document.querySelector('.temperature');
-        const localisation = document.querySelector('.localisation');
-
-        let weather = data.current.weather;
+         console.log(data)
 
 
-        for(let i = 0; i < weather.length; i++){
-            temps.innerText = `${weather[i].description}`
-            temperature.innerText = `${Math.trunc(data.current.temp)}°`
-            localisation.innerText = `${data.timezone}`
+        let donnee = data.current;
+
+        temps.innerText = `${donnee.weather[0].description}`;
+        temperature.innerText = `${Math.trunc(donnee.temp)}°`;
+        localisation.innerText = `${data.timezone}`;
+
+        // Les heures par tranche de 3 et leurs température
+
+        let heureActuelle = new Date().getHours();
+
+        for(let i = 0; i < previsionHeure.length; i++){
+            let heureIncr = heureActuelle + (i*3);
+            if(heureIncr > 24){
+                previsionHeure[i].innerText = `${heureIncr - 24}h`
+            }else if(heureIncr === 24){
+                previsionHeure[i].innerText = `00h`;
+            }else{
+                previsionHeure[i].innerText = `${heureIncr}h`;
+            }
         }
 
+        for(let i = 0; i < previsionDegre.length; i++){
+            previsionDegre[i].innerText = `${Math.trunc(data.hourly[i*3].temp)}°`
+        }
+
+        // Jour de la semaine (3 premieres lettres )
+
+        for(let i = 0; i < tabJourEnOrdre.length; i++){
+            jourSemaine[i].innerText = tabJourEnOrdre[i].slice(0,3);
+        }
+
+        //Temperature par jour
+
+        for(let i = 0; i < 7; i++){
+            joursTemperature[i].innerText = `${Math.trunc(data.daily[i+1].temp.day)}°`
+        }
+
+        // icon dynamique
+
+        if(heureActuelle >= 6 || heureActuelle === 21){
+            imgIcon.src = `ressources/jour/${donnee.weather[0].icon}.svg`
+        }else{
+            imgIcon.src = `ressources/nuit/${donnee.weather[0].icon}.svg`
+        }
+
+        console.log(donnee.weather[0].icon)
+
+        // Animation de chargement 
+        chargement.classList.add('disparition');
 
     })
 }
