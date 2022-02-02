@@ -12,7 +12,7 @@ let jourActuel = ajd.toLocaleDateString('fr-FR', option);
 jourActuel = jourActuel.charAt(0).toUpperCase() + jourActuel.slice(1);
 
 if(jourActuel !== 'Lundi'){
-    tabJourEnOrdre = jourSemaine.slice(jourSemaine.indexOf(jourActuel)).concat(jourSemaine.slice(0, jourSemaine[jourActuel]));
+    tabJourEnOrdre = jourSemaine.slice(jourSemaine.indexOf(jourActuel)).concat(jourSemaine.slice(0, jourSemaine.indexOf(jourActuel)));
 }
 
 export default tabJourEnOrdre;

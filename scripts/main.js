@@ -73,16 +73,19 @@ function AppelApi(long, lat){
         // icon dynamique
 
         if(heureActuelle >= 6 || heureActuelle === 21){
-            imgIcon.src = `ressources/jour/${donnee.weather[0].icon}.svg`
+            imgIcon.src = `./ressources/nuit/${donnee.weather[0].icon}.svg`
         }else{
-            imgIcon.src = `ressources/nuit/${donnee.weather[0].icon}.svg`
+            imgIcon.src = `./ressources/jour/${donnee.weather[0].icon}.svg`
         }
 
-        console.log(donnee.weather[0].icon)
+        console.log(donnee.weather[0])
 
         // Animation de chargement 
         chargement.classList.add('disparition');
 
+    })
+    .catch((error) => {
+        console.log(error)
     })
 }
 
